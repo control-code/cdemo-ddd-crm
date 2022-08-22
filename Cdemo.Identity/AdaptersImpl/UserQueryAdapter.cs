@@ -1,13 +1,17 @@
 ﻿using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Dapper;
 using Cdemo.Identity.Adapters;
-using System.Xml.Linq;
 
 namespace Cdemo.Identity.AdaptersImpl
 {
 	public class UserQueryAdapter : IUserQueryAdapter
 	{
 		private readonly string _connectionStr;
+		public UserQueryAdapter(IConfiguration configuration)
+			: this(configuration.GetConnectionString(typeof(UserQueryAdapter).Name) ?? 
+			       configuration.GetConnectionString("DefaultMsSql"))
+		{ }
 
 		public UserQueryAdapter(string connectionStr)
 		{

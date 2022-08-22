@@ -2,10 +2,11 @@
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Text;
+using System.Dynamic;
+using Microsoft.Extensions.Configuration;
 using Dapper;
 using Cdemo.Entities;
 using Cdemo.Adapters;
-using System.Dynamic;
 
 namespace Cdemo.AdaptersImpl
 {
@@ -15,6 +16,11 @@ namespace Cdemo.AdaptersImpl
 		private readonly string _tableName;
 		private readonly string _columnList;
 		private readonly string _valueList;
+
+		public Repository(IConfiguration configuration)
+			: this(configuration.GetConnectionString(typeof(T).Name + "Repository") ??
+			       configuration.GetConnectionString("DefaultMsSql"))
+		{ }
 
 		public Repository(string connectionStr)
 		{

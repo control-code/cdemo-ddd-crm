@@ -4,6 +4,9 @@ using Cdemo.Identity.AdaptersImpl;
 using Cdemo.Identity.Entities;
 using Cdemo.Identity.Services;
 using Cdemo.Identity.ServicesImpl;
+using Microsoft.Extensions.DependencyInjection;
+using Cdemo.Identity.Adapters;
+using Cdemo.Adapters;
 
 namespace Cdemo.WebApi
 {
@@ -22,9 +25,9 @@ namespace Cdemo.WebApi
 
 			var connectionString = builder.Configuration.GetConnectionString("MsSql");
 
-			var userRepo = new Repository<User, UserState>(connectionString);
-			var userQuery = new UserQueryAdapter(connectionString);
-			builder.Services.AddSingleton<IUserService>(new UserService(userRepo, userQuery));
+			builder.Services.AddSingleton<IRepository<User, UserState>, Repository<User, UserState>>();
+			builder.Services.AddSingleton<IUserQueryAdapter, UserQueryAdapter>();
+			builder.Services.AddSingleton<IUserService, UserService>();
 
 			var app = builder.Build();
 
