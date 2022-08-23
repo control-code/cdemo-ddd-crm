@@ -20,8 +20,6 @@ namespace Cdemo.Identity.ServicesImpl
 
 		public async Task<Guid> Login(string name, string pass)
 		{
-			//return Task.FromResult(Guid.Parse("6072EE50-162F-40F0-A5CD-2E6CCE2D92E3"));
-
 			var item = await _query.FindByName(name);
 			
 			if (item != null)

@@ -7,6 +7,8 @@ using Cdemo.Identity.ServicesImpl;
 using Microsoft.Extensions.DependencyInjection;
 using Cdemo.Identity.Adapters;
 using Cdemo.Adapters;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Cdemo.WebApi
 {
@@ -21,7 +23,19 @@ namespace Cdemo.WebApi
 			builder.Services.AddControllers();
 
 			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			builder.Services.AddSwaggerGen(options =>
+			{
+				options.SwaggerDoc("v1", new OpenApiInfo
+				{
+					Version = "v1",
+					Title = "Demo CRM API Example",
+					Description = "An example implementation of Web API for simple demo CRM",
+				});
+
+				// using System.Reflection;
+				var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+			});
 
 			var connectionString = builder.Configuration.GetConnectionString("MsSql");
 

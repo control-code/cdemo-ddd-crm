@@ -7,6 +7,9 @@ using Cdemo.Identity.Services;
 
 namespace Cdemo.Identity.Controllers
 {
+	/// <summary>
+	/// Application user actions
+	/// </summary>
 	[ApiController]
 	[Route("api/v1/users")]
 	public class UserController : ControllerBase
@@ -20,6 +23,14 @@ namespace Cdemo.Identity.Controllers
 			_logger = logger;
 		}
 
+		/// <summary>
+		/// User login action
+		/// </summary>
+		/// <param name="name">User name</param>
+		/// <param name="pass">User password</param>
+		/// <returns>Authentication cookie</returns>
+		/// <response code="200">Successful login</response>
+		/// <response code="404">User not found</response>
 		[HttpPost]
 		[Route("actions/log-in")]
 		public async Task<IActionResult> PostLogin(string name, string pass)
@@ -43,6 +54,12 @@ namespace Cdemo.Identity.Controllers
 			return Ok();
 		}
 
+		/// <summary>
+		/// User logout action
+		/// </summary>
+		/// <returns>Success if user authenticated</returns>
+		/// <response code="200">Successful logout</response>
+		/// <response code="404">Not authenticated</response>
 		[Authorize]
 		[HttpPost]
 		[Route("actions/log-out")]
@@ -52,6 +69,14 @@ namespace Cdemo.Identity.Controllers
 			return Ok();
 		}
 
+		/// <summary>
+		/// New user registration
+		/// </summary>
+		/// <param name="name">New user name</param>
+		/// <param name="pass">New user password</param>
+		/// <returns>Success if the name is not already taken</returns>
+		/// <response code="200">User successfully registered</response>
+		/// <response code="400">User name already taken</response>
 		[HttpPost]
 		[Route("actions/register")]
 		public async Task<IActionResult> PostRegister(string name, string pass)
@@ -61,9 +86,13 @@ namespace Cdemo.Identity.Controllers
 				await _service.Register(name, pass);
 				return Ok();
 			}
-			catch (NameAlreadyTakenException ex)
+			catch (NameAlreadyTakenException)
 			{
-				return BadRequest(ex);
+				return BadRequest($"User name {name} already taken");
+			}
+			catch (Exception)
+			{
+				return StatusCode(500);
 			}
 		}
 
