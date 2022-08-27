@@ -1,10 +1,11 @@
 ﻿using Cdemo.AdaptersImpl;
 using Cdemo.Identity.Adapters;
 using Cdemo.Identity.Entities;
+using Cdemo.Identity.Services;
 
 namespace Cdemo.Identity.UnitTests
 {
-	public class FakeUserQueryAdapter : IUserQueryAdapter
+    public class FakeUserQueryAdapter : IUserQueryAdapter
 	{
 		private readonly InMemoryRepository<User, UserState> _repo;
 
@@ -22,6 +23,11 @@ namespace Cdemo.Identity.UnitTests
 				return Task.FromResult((UserRecord?)rec);
 			}
 			return Task.FromResult((UserRecord?)null);
+		}
+
+		public Task<IEnumerable<ShortUserRecord>> GetAllUsers()
+		{
+			return Task.FromResult(_repo.Entities.Select(e => new ShortUserRecord(e.Id, e.State.Name, e.IsAdmin)));
 		}
 
 		public Task<int> GetUsersCount()

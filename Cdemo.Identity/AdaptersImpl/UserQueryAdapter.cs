@@ -2,10 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Dapper;
 using Cdemo.Identity.Adapters;
+using Cdemo.Identity.Services;
 
 namespace Cdemo.Identity.AdaptersImpl
 {
-	public class UserQueryAdapter : IUserQueryAdapter
+    public class UserQueryAdapter : IUserQueryAdapter
 	{
 		private readonly string _connectionStr;
 		public UserQueryAdapter(IConfiguration configuration)
@@ -16,6 +17,15 @@ namespace Cdemo.Identity.AdaptersImpl
 		public UserQueryAdapter(string connectionStr)
 		{
 			_connectionStr = connectionStr;
+		}
+
+		public async Task<IEnumerable<ShortUserRecord>> GetAllUsers()
+		{
+			var q = "SELECT [Id], [Name], [IsAdmin] FROM [UserStates]";
+
+			using var connection = new SqlConnection(_connectionStr);
+			var recs = await connection.QueryAsync<ShortUserRecord>(q);
+			return recs;
 		}
 
 		public async Task<UserRecord?> FindByName(string name)

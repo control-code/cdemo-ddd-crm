@@ -7,5 +7,7 @@ namespace Cdemo.Adapters
 		Task<T?> Get(Guid id);
 
 		Task Add(T entity);
+
+		Task Update(T entity);
 	}
 }

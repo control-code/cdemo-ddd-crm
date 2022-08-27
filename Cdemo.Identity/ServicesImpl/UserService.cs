@@ -1,9 +1,9 @@
-﻿using Cdemo.Adapters;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Cdemo.Adapters;
 using Cdemo.Identity.Adapters;
 using Cdemo.Identity.Entities;
 using Cdemo.Identity.Services;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Cdemo.Identity.ServicesImpl
 {
@@ -53,12 +53,59 @@ namespace Cdemo.Identity.ServicesImpl
 			await _repo.Add(user);
 		}
 
+		public async Task SetAdminFlag(Guid userId, Guid initiatorId)
+		{
+			await CheckAdminAccess(initiatorId);
+
+			var user = await _repo.Get(userId);
+			if (user != null)
+			{
+				user.SetAdmin();
+				await _repo.Update(user);
+			}
+			else
+			{
+				throw new UserNotFoundException();
+			}
+		}
+
+		public async Task ResetAdminFlag(Guid userId, Guid initiatorId)
+		{
+			await CheckAdminAccess(initiatorId);
+
+			var user = await _repo.Get(userId);
+			if (user != null)
+			{
+				user.ResetAdmin();
+				await _repo.Update(user);
+			}
+			else
+			{
+				throw new UserNotFoundException();
+			}
+		}
+
+		public async Task<IEnumerable<ShortUserRecord>> GetAllUsers(Guid initiatorId)
+		{
+			await CheckAdminAccess(initiatorId);
+			return await _query.GetAllUsers();
+		}
+
 		private static string ComputeHash(Guid id, string pass)
 		{
 			using (var sha = SHA256.Create())
 			{
 				var text = pass + id;
 				return Convert.ToBase64String(sha.ComputeHash(Encoding.UTF8.GetBytes(text)));
+			}
+		}
+
+		private async Task CheckAdminAccess(Guid initiatorId)
+		{
+			var initiator = await _repo.Get(initiatorId);
+			if (initiator == null || !initiator.IsAdmin)
+			{
+				throw new UnauthorizedException();
 			}
 		}
 	}

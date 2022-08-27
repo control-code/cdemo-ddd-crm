@@ -7,5 +7,11 @@ namespace Cdemo.Identity.Services
 		Task<Guid> Login(string name, string pass);
 
 		Task Register(string name, string pass);
+
+		Task SetAdminFlag(Guid userId, Guid initiatorId);
+
+		Task ResetAdminFlag(Guid userId, Guid initiatorId);
+
+		Task<IEnumerable<ShortUserRecord>> GetAllUsers(Guid initiatorId);
 	}
 }

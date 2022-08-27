@@ -90,19 +90,105 @@ namespace Cdemo.Identity.Controllers
 			{
 				return BadRequest($"User name {name} already taken");
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				_logger.LogError(ex, "Error");
 				return StatusCode(500);
 			}
 		}
 
+		/// <summary>
+		/// Assign admin rights to a user
+		/// </summary>
+		/// <param name="id">User id</param>
+		/// <response code="200">Successful</response>
+		/// <response code="401">Only admin can perform this operation</response>
+		[Authorize]
+		[HttpPost]
+		[Route("{id}/actions/set-admin")]
+		public async Task<IActionResult> PostSetAdminFlag(Guid id)
+		{
+			try
+			{
+				await _service.SetAdminFlag(id, GetInitiatorId());
+				return Ok();
+			}
+			catch (UserNotFoundException)
+			{
+				return NotFound($"User {id} not found");
+			}
+			catch (UnauthorizedException)
+			{
+				return StatusCode(StatusCodes.Status401Unauthorized);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error");
+				return StatusCode(500);
+			}
+		}
+
+		/// <summary>
+		/// Revoke admin rights from a user
+		/// </summary>
+		/// <param name="id">User id</param>
+		/// <response code="200">Successful</response>
+		/// <response code="401">Only admin can perform this operation</response>
+		[Authorize]
+		[HttpPost]
+		[Route("{id}/actions/reset-admin")]
+		public async Task<IActionResult> PostResetAdminFlag(Guid id)
+		{
+			try
+			{
+				await _service.ResetAdminFlag(id, GetInitiatorId());
+				return Ok();
+			}
+			catch (UserNotFoundException)
+			{
+				return NotFound($"User {id} not found");
+			}
+			catch (UnauthorizedException)
+			{
+				return StatusCode(StatusCodes.Status401Unauthorized);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error");
+				return StatusCode(500);
+			}
+		}
+
+		/// <summary>
+		/// Get list of all registered users
+		/// </summary>
+		/// <returns>User list</returns>
+		/// <response code="200">User list</response>
+		/// <response code="401">Only admin can perform this operation</response>
 		[Authorize]
 		[HttpGet]
-		[Route("current/name")]
-		public string GetName()
+		[Route("")]
+		public async Task<ActionResult<IEnumerable<ShortUserRecord>>> GetAll()
 		{
-			var n = User.Claims.Single(i => i.Type == "id") + " " + User.Identity?.Name;
-			return n;
+			try
+			{
+				var users = await _service.GetAllUsers(GetInitiatorId());
+				return Ok(users.ToList());
+			}
+			catch (UnauthorizedException)
+			{
+				return StatusCode(StatusCodes.Status401Unauthorized);
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error");
+				return StatusCode(500);
+			}
+		}
+
+		private Guid GetInitiatorId()
+		{
+			return Guid.Parse(User.Claims.Single(i => i.Type == "id").Value);
 		}
 	}
 }

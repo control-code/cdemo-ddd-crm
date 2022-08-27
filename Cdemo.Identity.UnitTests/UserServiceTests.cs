@@ -1,5 +1,6 @@
 using Cdemo.AdaptersImpl;
 using Cdemo.Identity.Entities;
+using Cdemo.Identity.Services;
 using Cdemo.Identity.ServicesImpl;
 
 namespace Cdemo.Identity.UnitTests
@@ -53,6 +54,48 @@ namespace Cdemo.Identity.UnitTests
 		{
 			_service.Register("admin", "test").Wait();
 			Assert.Equal(Guid.Empty, _service.Login("test", "test").Result);
+		}
+
+		[Fact]
+		public void SetAdminFlag()
+		{
+			_service.Register("admin", "test").Wait();
+			_service.Register("test", "test").Wait();
+			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
+			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+
+			var adminId = _repo.Entities.Single(e => e.State.Name == "admin").Id;
+			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			_service.SetAdminFlag(userId, adminId).Wait();
+			Assert.True(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+		}
+
+		[Fact]
+		public void ResetAdminFlag()
+		{
+			_service.Register("admin", "test").Wait();
+			_service.Register("test", "test").Wait();
+			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
+			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+
+			var adminId = _repo.Entities.Single(e => e.State.Name == "admin").Id;
+			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			_service.SetAdminFlag(userId, adminId).Wait();
+			Assert.True(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			_service.ResetAdminFlag(userId, adminId).Wait();
+			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+		}
+
+		[Fact]
+		public void SetAdminFlagUnauthorized()
+		{
+			_service.Register("admin", "test").Wait();
+			_service.Register("test", "test").Wait();
+			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
+			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+
+			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			Assert.ThrowsAsync<UnauthorizedException>(() => _service.SetAdminFlag(userId, userId)).Wait();
 		}
 	}
 }
