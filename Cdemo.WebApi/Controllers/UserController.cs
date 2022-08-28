@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Cdemo.Identity.Services;
 
-namespace Cdemo.Identity.Controllers
+namespace Cdemo.WebApi.Controllers
 {
 	/// <summary>
 	/// Application user actions
 	/// </summary>
 	[ApiController]
 	[Route("api/v1/users")]
-	public class UserController : ControllerBase
+	public class UserController : ApiControllerBase
 	{
 		private readonly IUserService _service;
 		private readonly ILogger<UserController> _logger;
@@ -184,11 +184,6 @@ namespace Cdemo.Identity.Controllers
 				_logger.LogError(ex, "Error");
 				return StatusCode(500);
 			}
-		}
-
-		private Guid GetInitiatorId()
-		{
-			return Guid.Parse(User.Claims.Single(i => i.Type == "id").Value);
 		}
 	}
 }

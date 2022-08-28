@@ -91,6 +91,25 @@ namespace Cdemo.Identity.ServicesImpl
 			return await _query.GetAllUsers();
 		}
 
+		public async Task<ShortUserRecord> GetUser(Guid userId, Guid initiatorId)
+		{
+			if (userId != initiatorId)
+			{
+				await CheckAdminAccess(initiatorId);
+			}
+
+			var user = await _repo.Get(userId);
+
+			if (user != null)
+			{
+				return new ShortUserRecord(user.Id, user.State.Name, user.IsAdmin);
+			}
+			else
+			{
+				throw new UserNotFoundException();
+			}
+		}
+
 		private static string ComputeHash(Guid id, string pass)
 		{
 			using (var sha = SHA256.Create())

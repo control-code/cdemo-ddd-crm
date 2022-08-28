@@ -13,5 +13,7 @@ namespace Cdemo.Identity.Services
 		Task ResetAdminFlag(Guid userId, Guid initiatorId);
 
 		Task<IEnumerable<ShortUserRecord>> GetAllUsers(Guid initiatorId);
+
+		Task<ShortUserRecord> GetUser(Guid userId, Guid initiatorId);
 	}
 }

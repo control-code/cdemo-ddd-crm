@@ -4,11 +4,15 @@ using Cdemo.Identity.AdaptersImpl;
 using Cdemo.Identity.Entities;
 using Cdemo.Identity.Services;
 using Cdemo.Identity.ServicesImpl;
-using Microsoft.Extensions.DependencyInjection;
 using Cdemo.Identity.Adapters;
 using Cdemo.Adapters;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Cdemo.Staff.Entities;
+using Cdemo.Staff.Adapters;
+using Cdemo.Staff.AdaptersImpl;
+using Cdemo.Staff.ServiceImpl;
+using Cdemo.Staff.Service;
 
 namespace Cdemo.WebApi
 {
@@ -42,6 +46,10 @@ namespace Cdemo.WebApi
 			builder.Services.AddSingleton<IRepository<User, UserState>, Repository<User, UserState>>();
 			builder.Services.AddSingleton<IUserQueryAdapter, UserQueryAdapter>();
 			builder.Services.AddSingleton<IUserService, UserService>();
+
+			builder.Services.AddSingleton<IRepository<Employee, EmployeeState>, Repository<Employee, EmployeeState>>();
+			builder.Services.AddSingleton<IEmployeeQueryAdapter, EmployeeQueryAdapter>();
+			builder.Services.AddSingleton<IEmployeeService, EmployeeService>();
 
 			var app = builder.Build();
 

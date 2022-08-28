@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cdemo.Identity\Cdemo.Identity.csproj" />
+    <ProjectReference Include="..\Cdemo.Staff\Cdemo.Staff.csproj" />
   </ItemGroup>
 
 </Project>
