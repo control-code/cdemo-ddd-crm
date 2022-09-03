@@ -34,7 +34,7 @@ namespace Cdemo.WebApi.Controllers
 		[Authorize]
 		[HttpPost]
 		[Route("actions/add")]
-		public async Task<IActionResult> PostRegister(Guid userId, string firstName, string lastName)
+		public async Task<IActionResult> PostAddEmployee(Guid userId, string firstName, string lastName)
 		{
 			try
 			{

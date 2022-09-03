@@ -13,7 +13,7 @@ namespace Cdemo.Staff.AdaptersImpl
 
 		public EmployeeQueryAdapter(IConfiguration configuration)
 			: this(configuration.GetConnectionString(typeof(EmployeeQueryAdapter).Name) ??
-		   configuration.GetConnectionString("DefaultMsSql"))
+			       configuration.GetConnectionString("DefaultMsSql"))
 		{ }
 
 		public EmployeeQueryAdapter(string connectionStr)

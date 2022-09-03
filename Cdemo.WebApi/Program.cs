@@ -1,18 +1,23 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.OpenApi.Models;
+using Cdemo.Adapters;
 using Cdemo.AdaptersImpl;
 using Cdemo.Identity.AdaptersImpl;
 using Cdemo.Identity.Entities;
 using Cdemo.Identity.Services;
 using Cdemo.Identity.ServicesImpl;
 using Cdemo.Identity.Adapters;
-using Cdemo.Adapters;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
 using Cdemo.Staff.Entities;
 using Cdemo.Staff.Adapters;
 using Cdemo.Staff.AdaptersImpl;
 using Cdemo.Staff.ServiceImpl;
 using Cdemo.Staff.Service;
+using Cdemo.Customers.Entities;
+using Cdemo.Customers.Adapters;
+using Cdemo.Customers.AdaptersImpl;
+using Cdemo.Customers.ServicesImpl;
+using Cdemo.Customers.Services;
 
 namespace Cdemo.WebApi
 {
@@ -50,6 +55,10 @@ namespace Cdemo.WebApi
 			builder.Services.AddSingleton<IRepository<Employee, EmployeeState>, Repository<Employee, EmployeeState>>();
 			builder.Services.AddSingleton<IEmployeeQueryAdapter, EmployeeQueryAdapter>();
 			builder.Services.AddSingleton<IEmployeeService, EmployeeService>();
+
+			builder.Services.AddSingleton<IRepository<Customer, CustomerState>, Repository<Customer, CustomerState>>();
+			builder.Services.AddSingleton<ICustomerQueryAdapter, CustomerQueryAdapter>();
+			builder.Services.AddSingleton<ICustomerService, CustomerService>();
 
 			var app = builder.Build();
 

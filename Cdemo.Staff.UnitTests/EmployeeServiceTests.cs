@@ -28,7 +28,7 @@ namespace Cdemo.Staff.UnitTests
 		}
 
 		[Fact]
-		public void TestAddEmployee()
+		public void AddEmployee()
 		{
 			_userService.Register("admin", "admin").Wait();
 			var userId = _userRepo.Entities.Single(e => e.State.Name == "admin").Id;
@@ -41,7 +41,7 @@ namespace Cdemo.Staff.UnitTests
 		}
 
 		[Fact]
-		public void TestAddEmployeeUnauthorized()
+		public void AddEmployeeUnauthorized()
 		{
 			_userService.Register("admin", "admin").Wait();
 			_userService.Register("test", "test").Wait();
