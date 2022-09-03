@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Cdemo.Customers.Services;
+using Cdemo.Identity.Services;
+using Cdemo.Staff.Service;
 
 namespace Cdemo.WebApi.Controllers
 {
@@ -57,6 +59,38 @@ namespace Cdemo.WebApi.Controllers
 		{
 			var customers = await _service.GetCustomers(GetInitiatorId());
 			return Ok(customers.ToList());
+		}
+
+		/// <summary>
+		/// Get customer data by id
+		/// </summary>
+		/// <param name="id">Customer id</param>
+		/// <returns>Customer data</returns>
+		/// <response code="200">Successful</response>
+		/// <response code="404">Customer not found</response>
+		[Authorize]
+		[HttpGet]
+		[Route("{id}")]
+		public async Task<ActionResult<CustomerExtData?>> GetById(Guid id)
+		{
+			try
+			{
+				var customer = await _service.GetCustomer(id, GetInitiatorId());
+
+				if (customer == null)
+				{
+					return NotFound();
+				}
+				else
+				{
+					return Ok(customer);
+				}
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Error");
+				return StatusCode(500);
+			}
 		}
 	}
 }

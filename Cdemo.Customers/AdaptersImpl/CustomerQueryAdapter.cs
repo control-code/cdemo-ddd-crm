@@ -20,6 +20,20 @@ namespace Cdemo.Customers.AdaptersImpl
 			_connectionStr = connectionStr;
 		}
 
+		public async Task<CustomerExtData?> GetCustomer(Guid custormerId)
+		{
+			var q = "SELECT c.[Id], c.[RegistrationDateTime], c.[FirstName], c.[LastName], " +
+					"c.[Phone], c.[Email], COUNT(n.Id) NotesCount " +
+					"FROM [CustomerStates] c " +
+					"LEFT JOIN [CustomerNoteStates] n ON n.[CustomerId] = c.[Id] " +
+					"WHERE c.[Id] = @custormerId " +
+					"GROUP BY c.[Id], c.[RegistrationDateTime], c.[FirstName], c.[LastName], c.[Phone], c.[Email]";
+
+			using var connection = new SqlConnection(_connectionStr);
+			var record = await connection.QuerySingleAsync<CustomerExtData>(q, new { custormerId });
+			return record;
+		}
+
 		public async Task<IEnumerable<CustomerData>> GetCustomers(Guid responsibleUserId)
 		{
 			var q = "SELECT c.[Id], c.[FirstName], c.[LastName], " +

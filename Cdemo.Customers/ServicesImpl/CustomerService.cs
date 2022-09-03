@@ -28,9 +28,9 @@ namespace Cdemo.Customers.ServicesImpl
 			return _query.GetCustomers(initiatorId);
 		}
 
-		public Task<CustomerExtData> GetCustomerExt(Guid custormerId, Guid initiatorId)
+		public Task<CustomerExtData?> GetCustomer(Guid custormerId, Guid initiatorId)
 		{
-			throw new NotImplementedException();
+			return _query.GetCustomer(custormerId);
 		}
 	}
 }

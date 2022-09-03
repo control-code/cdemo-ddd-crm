@@ -6,6 +6,6 @@ namespace Cdemo.Customers.Services
 	{
 		Task RegisterNewCustomer(DateTime now, string firstName, string lastName, string phone, string email, Guid initiatorId);
 		Task<IEnumerable<CustomerData>> GetCustomers(Guid initiatorId);
-		Task<CustomerExtData> GetCustomerExt(Guid custormerId, Guid initiatorId);
+		Task<CustomerExtData?> GetCustomer(Guid custormerId, Guid initiatorId);
 	}
 }
