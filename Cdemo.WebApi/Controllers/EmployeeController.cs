@@ -27,7 +27,6 @@ namespace Cdemo.WebApi.Controllers
 		/// <param name="userId">Registered user account Id to bind</param>
 		/// <param name="firstName">Employee first name</param>
 		/// <param name="lastName">Employee last name</param>
-		/// <returns>Success</returns>
 		/// <response code="200">Successful</response>
 		/// <response code="401">Only admin can perform this operation</response>
 		/// <response code="404">User not found</response>

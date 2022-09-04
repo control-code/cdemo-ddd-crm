@@ -46,5 +46,15 @@ namespace Cdemo.Customers.AdaptersImpl
 			var records = await connection.QueryAsync<CustomerData>(q, new { responsibleUserId });
 			return records;
 		}
+
+		public async Task<IEnumerable<CustomerNoteData>> GetCustomerNotes(Guid custormerId)
+		{
+			var q = "SELECT [Id], [AuthorUserId], [CustomerId], [DateTime], [Text] " +
+				"FROM [CustomerNoteStates] WHERE [CustomerId] = @customerId";
+
+			using var connection = new SqlConnection(_connectionStr);
+			var records = await connection.QueryAsync<CustomerNoteData>(q, new { custormerId });
+			return records;
+		}
 	}
 }

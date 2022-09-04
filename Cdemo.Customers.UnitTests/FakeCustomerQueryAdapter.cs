@@ -20,5 +20,15 @@ namespace Cdemo.Customers.UnitTests
 				_repo.Entities.Select(
 					e => new CustomerData(e.Id, e.State.FirstName, e.State.LastName, "", "")));
 		}
+
+		public Task<CustomerExtData?> GetCustomer(Guid custormerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<IEnumerable<CustomerNoteData>> GetCustomerNotes(Guid custormerId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

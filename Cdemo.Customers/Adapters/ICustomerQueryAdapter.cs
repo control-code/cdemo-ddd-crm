@@ -6,5 +6,6 @@ namespace Cdemo.Customers.Adapters
 	{
 		Task<IEnumerable<CustomerData>> GetCustomers(Guid responsibleUserId);
 		Task<CustomerExtData?> GetCustomer(Guid custormerId);
+		Task<IEnumerable<CustomerNoteData>> GetCustomerNotes(Guid custormerId);
 	}
 }

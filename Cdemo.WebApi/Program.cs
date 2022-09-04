@@ -57,6 +57,7 @@ namespace Cdemo.WebApi
 			builder.Services.AddSingleton<IEmployeeService, EmployeeService>();
 
 			builder.Services.AddSingleton<IRepository<Customer, CustomerState>, Repository<Customer, CustomerState>>();
+			builder.Services.AddSingleton<IRepository<CustomerNote, CustomerNoteState>, Repository<CustomerNote, CustomerNoteState>>();
 			builder.Services.AddSingleton<ICustomerQueryAdapter, CustomerQueryAdapter>();
 			builder.Services.AddSingleton<ICustomerService, CustomerService>();
 

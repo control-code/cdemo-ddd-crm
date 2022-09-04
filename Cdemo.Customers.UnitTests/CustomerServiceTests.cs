@@ -22,8 +22,9 @@ namespace Cdemo.Customers.UnitTests
 			_userService = new UserService(_userRepo, userQuery);
 
 			_repo = new InMemoryRepository<Customer, CustomerState>();
+			var notesRepo = new InMemoryRepository<CustomerNote, CustomerNoteState>();
 			_query = new FakeCustomerQueryAdapter(_repo);
-			_service = new CustomerService(_repo, _query);
+			_service = new CustomerService(_repo, notesRepo, _query);
 		}
 
 		[Fact]
