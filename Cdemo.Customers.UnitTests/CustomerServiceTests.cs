@@ -31,24 +31,24 @@ namespace Cdemo.Customers.UnitTests
 		public void RegisterNewCustomer()
 		{
 			_userService.Register("admin", "admin").Wait();
-			var userId = _userRepo.Entities.Single(e => e.State.Name == "admin").Id;
+			var userId = _userRepo.States.Single(e => e.Value.Name == "admin").Key;
 
 			var now = DateTime.Parse("2022-08-01T20:20:00Z");
 			_service.RegisterNewCustomer(now, "Test", "Customer", "1234567890", "email@test.com", userId).Wait();
-			var customer = _repo.Entities.Single();
-			Assert.Equal("Test", customer.State.FirstName);
-			Assert.Equal("Customer", customer.State.LastName);
-			Assert.Equal("1234567890", customer.State.Phone);
-			Assert.Equal("email@test.com", customer.State.Email);
-			Assert.Equal(now, customer.State.RegistrationDateTime);
-			Assert.Equal(userId, customer.State.ResponsibleUserId);
+			var customer = _repo.States.Single();
+			Assert.Equal("Test", customer.Value.FirstName);
+			Assert.Equal("Customer", customer.Value.LastName);
+			Assert.Equal("1234567890", customer.Value.Phone);
+			Assert.Equal("email@test.com", customer.Value.Email);
+			Assert.Equal(now, customer.Value.RegistrationDateTime);
+			Assert.Equal(userId, customer.Value.ResponsibleUserId);
 		}
 
 		[Fact]
 		public void GetCustomers()
 		{
 			_userService.Register("admin", "admin").Wait();
-			var userId = _userRepo.Entities.Single(e => e.State.Name == "admin").Id;
+			var userId = _userRepo.States.Single(e => e.Value.Name == "admin").Key;
 
 			var now = DateTime.Parse("2022-08-01T20:20:00Z");
 			_service.RegisterNewCustomer(now, "Test1", "Customer1", "12345678901", "email1@test.com", userId).Wait();

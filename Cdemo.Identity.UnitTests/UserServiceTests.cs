@@ -22,8 +22,8 @@ namespace Cdemo.Identity.UnitTests
 		public void RegisterFirstUserAsAdmin()
 		{
 			_service.Register("admin", "admin").Wait();
-			Assert.Equal(1, _repo.Entities.Count);
-			Assert.True(_repo.Entities.First().State.IsAdmin);
+			Assert.Equal(1, _repo.States.Count);
+			Assert.True(_repo.States.Single().Value.IsAdmin);
 		}
 
 		[Fact]
@@ -31,15 +31,15 @@ namespace Cdemo.Identity.UnitTests
 		{
 			_service.Register("admin", "admin").Wait();
 			_service.Register("test", "test").Wait();
-			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
-			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.True(_repo.States.Single(e => e.Value.Name == "admin").Value.IsAdmin);
+			Assert.False(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 		}
 
 		[Fact]
 		public void LoginUser()
 		{
 			_service.Register("admin", "admin").Wait();
-			Assert.Equal(_repo.Entities.First().Id, _service.Login("admin", "admin").Result);
+			Assert.Equal(_repo.States.First().Key, _service.Login("admin", "admin").Result);
 		}
 
 		[Fact]
@@ -61,13 +61,13 @@ namespace Cdemo.Identity.UnitTests
 		{
 			_service.Register("admin", "admin").Wait();
 			_service.Register("test", "test").Wait();
-			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
-			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.True(_repo.States.Single(e => e.Value.Name == "admin").Value.IsAdmin);
+			Assert.False(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 
-			var adminId = _repo.Entities.Single(e => e.State.Name == "admin").Id;
-			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			var adminId = _repo.States.Single(e => e.Value.Name == "admin").Key;
+			var userId = _repo.States.Single(e => e.Value.Name == "test").Key;
 			_service.SetAdminFlag(userId, adminId).Wait();
-			Assert.True(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.True(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 		}
 
 		[Fact]
@@ -75,15 +75,15 @@ namespace Cdemo.Identity.UnitTests
 		{
 			_service.Register("admin", "admin").Wait();
 			_service.Register("test", "test").Wait();
-			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
-			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.True(_repo.States.Single(e => e.Value.Name == "admin").Value.IsAdmin);
+			Assert.False(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 
-			var adminId = _repo.Entities.Single(e => e.State.Name == "admin").Id;
-			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			var adminId = _repo.States.Single(e => e.Value.Name == "admin").Key;
+			var userId = _repo.States.Single(e => e.Value.Name == "test").Key;
 			_service.SetAdminFlag(userId, adminId).Wait();
-			Assert.True(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.True(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 			_service.ResetAdminFlag(userId, adminId).Wait();
-			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.False(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 		}
 
 		[Fact]
@@ -91,10 +91,10 @@ namespace Cdemo.Identity.UnitTests
 		{
 			_service.Register("admin", "admin").Wait();
 			_service.Register("test", "test").Wait();
-			Assert.True(_repo.Entities.Single(e => e.State.Name == "admin").State.IsAdmin);
-			Assert.False(_repo.Entities.Single(e => e.State.Name == "test").State.IsAdmin);
+			Assert.True(_repo.States.Single(e => e.Value.Name == "admin").Value.IsAdmin);
+			Assert.False(_repo.States.Single(e => e.Value.Name == "test").Value.IsAdmin);
 
-			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			var userId = _repo.States.Single(e => e.Value.Name == "test").Key;
 			Assert.ThrowsAsync<UnauthorizedException>(() => _service.SetAdminFlag(userId, userId)).Wait();
 		}
 
@@ -104,8 +104,8 @@ namespace Cdemo.Identity.UnitTests
 			_service.Register("admin", "admin").Wait();
 			_service.Register("test", "test").Wait();
 
-			var adminId = _repo.Entities.Single(e => e.State.Name == "admin").Id;
-			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			var adminId = _repo.States.Single(e => e.Value.Name == "admin").Key;
+			var userId = _repo.States.Single(e => e.Value.Name == "test").Key;
 
 			var user1 = _service.GetUser(userId, adminId).Result;
 			Assert.Equal("test", user1.Name);
@@ -123,8 +123,8 @@ namespace Cdemo.Identity.UnitTests
 			_service.Register("admin", "admin").Wait();
 			_service.Register("test", "test").Wait();
 
-			var adminId = _repo.Entities.Single(e => e.State.Name == "admin").Id;
-			var userId = _repo.Entities.Single(e => e.State.Name == "test").Id;
+			var adminId = _repo.States.Single(e => e.Value.Name == "admin").Key;
+			var userId = _repo.States.Single(e => e.Value.Name == "test").Key;
 			Assert.ThrowsAsync<UnauthorizedException>(() => _service.GetUser(adminId, userId)).Wait();
 		}
 	}

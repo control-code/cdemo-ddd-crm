@@ -17,8 +17,8 @@ namespace Cdemo.Staff.UnitTests
 		public Task<IEnumerable<EmployeeData>> GetEmployees()
 		{
 			return Task.FromResult(
-				_repo.Entities.Select(
-					e => new EmployeeData(e.Id, e.State.UserId, e.State.FirstName, e.State.LastName)));
+				_repo.States.Select(
+					e => new EmployeeData(e.Key, e.Value.UserId, e.Value.FirstName, e.Value.LastName)));
 		}
 	}
 }

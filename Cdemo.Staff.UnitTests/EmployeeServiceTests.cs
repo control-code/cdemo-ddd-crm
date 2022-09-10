@@ -31,13 +31,13 @@ namespace Cdemo.Staff.UnitTests
 		public void AddEmployee()
 		{
 			_userService.Register("admin", "admin").Wait();
-			var userId = _userRepo.Entities.Single(e => e.State.Name == "admin").Id;
+			var userId = _userRepo.States.Single(e => e.Value.Name == "admin").Key;
 
 			_service.AddEmployee(userId, "Test", "Employee", userId).Wait();
-			var employee = _repo.Entities.Single();
-			Assert.Equal("Test", employee.State.FirstName);
-			Assert.Equal("Employee", employee.State.LastName);
-			Assert.Equal(userId, employee.State.UserId);
+			var employee = _repo.States.Single();
+			Assert.Equal("Test", employee.Value.FirstName);
+			Assert.Equal("Employee", employee.Value.LastName);
+			Assert.Equal(userId, employee.Value.UserId);
 		}
 
 		[Fact]
@@ -45,7 +45,7 @@ namespace Cdemo.Staff.UnitTests
 		{
 			_userService.Register("admin", "admin").Wait();
 			_userService.Register("test", "test").Wait();
-			var userId = _userRepo.Entities.Single(e => e.State.Name == "test").Id;
+			var userId = _userRepo.States.Single(e => e.Value.Name == "test").Key;
 
 			Assert.ThrowsAsync<UnauthorizedException>(() => _service.AddEmployee(userId, "Test", "Employee", userId)).Wait();
 		}

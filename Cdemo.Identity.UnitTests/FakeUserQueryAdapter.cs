@@ -16,10 +16,10 @@ namespace Cdemo.Identity.UnitTests
 
 		public Task<UserRecord?> FindByName(string name)
 		{
-			var e = _repo.Entities.FirstOrDefault(e => e.State.Name == name);
-			if (e != null)
+			var e = _repo.States.FirstOrDefault(e => e.Value.Name == name);
+			if (e.Key != Guid.Empty)
 			{
-				var rec = new UserRecord(e.Id, e.State.Name, e.State.PassHash, e.State.IsAdmin);
+				var rec = new UserRecord(e.Key, e.Value.Name, e.Value.PassHash, e.Value.IsAdmin);
 				return Task.FromResult((UserRecord?)rec);
 			}
 			return Task.FromResult((UserRecord?)null);
@@ -27,12 +27,12 @@ namespace Cdemo.Identity.UnitTests
 
 		public Task<IEnumerable<ShortUserRecord>> GetAllUsers()
 		{
-			return Task.FromResult(_repo.Entities.Select(e => new ShortUserRecord(e.Id, e.State.Name, e.IsAdmin)));
+			return Task.FromResult(_repo.States.Select(e => new ShortUserRecord(e.Key, e.Value.Name, e.Value.IsAdmin)));
 		}
 
 		public Task<int> GetUsersCount()
 		{
-			return Task.FromResult(_repo.Entities.Count);
+			return Task.FromResult(_repo.States.Count);
 		}
 	}
 }

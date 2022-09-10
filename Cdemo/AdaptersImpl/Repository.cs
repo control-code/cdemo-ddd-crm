@@ -64,12 +64,16 @@ namespace Cdemo.AdaptersImpl
 
 		public async Task Update(T entity)
 		{
+			if (!entity.StateChanged) return;
+
 			var cmd = $"UPDATE {_tableName} SET {_updateList} WHERE [Id] = @id";
 
 			var parameters = ConvertToFlatObject(entity);
 
 			using var connection = new SqlConnection(_connectionStr);
 			await connection.ExecuteAsync(cmd, parameters);
+
+			entity.Saved();
 		}
 
 		private string GetValueList()

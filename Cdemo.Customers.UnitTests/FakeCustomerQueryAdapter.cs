@@ -17,8 +17,8 @@ namespace Cdemo.Customers.UnitTests
 		public Task<IEnumerable<CustomerData>> GetCustomers(Guid responsibleUserId)
 		{
 			return Task.FromResult(
-				_repo.Entities.Select(
-					e => new CustomerData(e.Id, e.State.FirstName, e.State.LastName, "", "")));
+				_repo.States.Select(
+					e => new CustomerData(e.Key, e.Value.FirstName, e.Value.LastName, "", "")));
 		}
 
 		public Task<CustomerExtData?> GetCustomer(Guid custormerId)
