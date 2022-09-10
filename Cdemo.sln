@@ -17,7 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdemo.Staff.UnitTests", "Cd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdemo.Customers", "Cdemo.Customers\Cdemo.Customers.csproj", "{E50462B9-D8D9-4880-983C-AD4D3CCD0EBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cdemo.Customers.UnitTests", "Cdemo.Customers.UnitTests\Cdemo.Customers.UnitTests.csproj", "{8CFC36A5-6394-41BC-9A65-E7D629E65BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cdemo.Customers.UnitTests", "Cdemo.Customers.UnitTests\Cdemo.Customers.UnitTests.csproj", "{8CFC36A5-6394-41BC-9A65-E7D629E65BCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{6A578B14-7BC1-4B9D-8E46-0732128D22CC}"
+	ProjectSection(SolutionItems) = preProject
+		cdemo.sql = cdemo.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
