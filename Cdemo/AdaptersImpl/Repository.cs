@@ -1,8 +1,6 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Reflection;
 using System.Text;
-using System.Dynamic;
 using Microsoft.Extensions.Configuration;
 using Dapper;
 using Cdemo.Entities;
@@ -56,7 +54,8 @@ namespace Cdemo.AdaptersImpl
 		{
 			var cmd = $"INSERT INTO {_tableName} ({_columnList}) VALUES ({_valueList})";
 
-			var parameters = ConvertToFlatObject(entity);
+			var parameters = new DynamicParameters(entity.State);
+			parameters.Add("Id", entity.Id);
 
 			using var connection = new SqlConnection(_connectionStr);
 			await connection.ExecuteAsync(cmd, parameters);
@@ -68,7 +67,8 @@ namespace Cdemo.AdaptersImpl
 
 			var cmd = $"UPDATE {_tableName} SET {_updateList} WHERE [Id] = @id";
 
-			var parameters = ConvertToFlatObject(entity);
+			var parameters = new DynamicParameters(entity.State);
+			parameters.Add("Id", entity.Id);
 
 			using var connection = new SqlConnection(_connectionStr);
 			await connection.ExecuteAsync(cmd, parameters);
@@ -143,29 +143,6 @@ namespace Cdemo.AdaptersImpl
 		private string GetTableName()
 		{
 			return typeof(TState).Name + "s";
-		}
-
-		private ExpandoObject ConvertToFlatObject(T entity)
-		{
-			if (entity == null || entity.State == null)
-			{
-				throw new NullReferenceException("Null entity or entity.State");
-			}
-
-			var flatObject = new ExpandoObject();
-			var dictionary = flatObject as IDictionary<string, object>;
-
-			dictionary.Add("Id", entity.Id);
-			foreach (var property in entity.State.GetType().GetProperties())
-			{
-				var value = property.GetValue(entity.State);
-				if (value != null)
-				{
-					dictionary.Add(property.Name, value);
-				}
-			}
-
-			return flatObject;
 		}
 	}
 }
